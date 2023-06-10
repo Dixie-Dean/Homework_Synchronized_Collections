@@ -3,12 +3,13 @@ import java.util.concurrent.ArrayBlockingQueue;
 
 public class Main {
 
-    public static int STRINGS_NUMBER = 10_000;
+    public static int STRINGS_NUMBER = 100;
     public static ArrayBlockingQueue<String> QUEUE_A = new ArrayBlockingQueue<>(100);
     public static ArrayBlockingQueue<String> QUEUE_B = new ArrayBlockingQueue<>(100);
     public static ArrayBlockingQueue<String> QUEUE_C = new ArrayBlockingQueue<>(100);
 
     public static void main(String[] args) throws InterruptedException {
+        long startTs = System.currentTimeMillis(); // start time
 
         new Thread(() -> {
             for (int i = 0; i < STRINGS_NUMBER; i++) {
@@ -23,9 +24,9 @@ public class Main {
             }
         }).start();
 
-        Thread aThread = new Thread(new StatisticsCollector('a', QUEUE_A));
-        Thread bThread = new Thread(new StatisticsCollector('b', QUEUE_B));
-        Thread cThread = new Thread(new StatisticsCollector('c', QUEUE_C));
+        Thread aThread = new Thread(new StatisticsCollector('a', QUEUE_A, STRINGS_NUMBER));
+        Thread bThread = new Thread(new StatisticsCollector('b', QUEUE_B, STRINGS_NUMBER));
+        Thread cThread = new Thread(new StatisticsCollector('c', QUEUE_C, STRINGS_NUMBER));
 
         aThread.start();
         bThread.start();
@@ -34,6 +35,9 @@ public class Main {
         aThread.join();
         bThread.join();
         cThread.join();
+
+        long endTs = System.currentTimeMillis(); // end time
+        System.out.println("Time: " + (endTs - startTs) + "ms");
     }
 
     public static String generateText(String letters, int length) {
