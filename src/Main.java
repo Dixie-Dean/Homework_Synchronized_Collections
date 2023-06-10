@@ -1,15 +1,14 @@
-import java.util.*;
+import java.util.Random;
 import java.util.concurrent.ArrayBlockingQueue;
 
 public class Main {
 
-    public static int STRINGS_NUMBER = 100;
+    public static int STRINGS_NUMBER = 100_000;
     public static ArrayBlockingQueue<String> QUEUE_A = new ArrayBlockingQueue<>(100);
     public static ArrayBlockingQueue<String> QUEUE_B = new ArrayBlockingQueue<>(100);
     public static ArrayBlockingQueue<String> QUEUE_C = new ArrayBlockingQueue<>(100);
 
     public static void main(String[] args) throws InterruptedException {
-        long startTs = System.currentTimeMillis(); // start time
 
         new Thread(() -> {
             for (int i = 0; i < STRINGS_NUMBER; i++) {
@@ -36,8 +35,6 @@ public class Main {
         bThread.join();
         cThread.join();
 
-        long endTs = System.currentTimeMillis(); // end time
-        System.out.println("Time: " + (endTs - startTs) + "ms");
     }
 
     public static String generateText(String letters, int length) {
